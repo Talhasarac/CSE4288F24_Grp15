@@ -3,7 +3,7 @@ import csv
 input_file = 'input.csv'
 output_file = 'cleaned_output.csv'
 
-# Patterns to detect in the URL column
+
 patterns = {
     'has_index_jsp': 'index.jsp',
     'has_percent_login': '%login',
@@ -35,7 +35,7 @@ patterns = {
 with open(input_file, 'r', newline='', encoding='utf-8') as infile, \
      open(output_file, 'w', newline='', encoding='utf-8') as outfile:
     
-    # If your CSV is delimited by semicolons, specify delimiter=';'
+   
     reader = csv.DictReader(infile, delimiter=';')
     fieldnames = reader.fieldnames + list(patterns.keys())
     writer = csv.DictWriter(outfile, fieldnames=fieldnames, delimiter=';')
