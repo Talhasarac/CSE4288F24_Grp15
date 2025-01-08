@@ -1,14 +1,13 @@
 import csv
+from urllib.parse import urlparse, parse_qs
 
-input_file = 'input.csv'
+input_file = 'Csic_temiz.csv'
 output_file = 'cleaned_output.csv'
 
 
 patterns = {
     'has_index_jsp': 'index.jsp',
-    'has_percent_login': '%login',
     'has_anadir_jsp': 'anadir.jsp',
-    'has_entrar_login': 'entrar&login=',
     'has_pagar': 'pagar.jsp',
     'has_menum': 'menum.jsp',
     'has_titulo': 'titulo.jsp',
@@ -16,21 +15,28 @@ patterns = {
     'has_estilos': 'estilos.css',
     'has_imagenes': 'imagenes',
     'has_caracter': 'carecteristicas.jsp',
-    'has_side': '?id=',
     'has_creditos': 'creditos.jsp',
-    'has_creditos': 'creditos.jsp',
-    'has_pwd': 'pwd=',
-    "has_login": 'login=',
-    "has_pass": 'password=',
     "has_old": '.old',
     "has_nsf": '.nsf',
-    "has_B1": 'B1=',
     "has_Bak": '.BAK',
     "has_auth": 'autenticar.jsp',
-    "has_modo": 'modo=insertar',
     "has_priv": '_private'
-    
 }
+
+all_keys = []
+
+with open("Csic_temiz.csv", 'r', newline='', encoding='utf-8') as infile:
+    reader = csv.DictReader(infile, delimiter=';')
+    for row in reader:
+        url = row.get('URL', '')
+        parsed_url = urlparse(url)
+        params = parse_qs(parsed_url.query) 
+        all_keys.extend(params.keys())  
+
+
+unique_keys = list(set(all_keys))
+for key in unique_keys:
+    patterns[f'has_{key}'] = key
 
 with open(input_file, 'r', newline='', encoding='utf-8') as infile, \
      open(output_file, 'w', newline='', encoding='utf-8') as outfile:
